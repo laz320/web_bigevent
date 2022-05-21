@@ -48,22 +48,23 @@ $(function () {
             },
         });
     });
-    // 监听登录表单提交，发送登录请求
-    $("#form_login").on("submit", function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/api/login",
-            data: $(this).serialize(),
-            success: (res) =>{
-                console.log(res);
-                if (res.status !== 0) return layer.msg("登录失败！");
-                layer.msg("登录成功！");
-                localStorage.setItem("token",res.token);
-                location.herf="/index.html";
-            },
-        });
+    // 监听登录表单，发送登录请求
+$("#form_login").submit((e) => {
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url:  "/api/login",
+        data: $("#form_login").serialize(),
+        success: (res) => {
+            if (res.status !== 0) return layer.msg(res.message);
+            layer.msg("登录成功！");
+            // 将登录成功得到的 token 字符串，保存到 localStorage 中
+            localStorage.setItem("token", res.token);
+            // 跳转到主页
+            location.href = "/index.html";
+        },
     });
+});
 });
 
 
